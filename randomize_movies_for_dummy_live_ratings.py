@@ -17,15 +17,15 @@ import setpath
 
 #===> load saved trainset
 if __name__ == '__main__':
-    mainpath = setpath.setpath()
+    data_path = setpath.setpath()
     
     # load the 【sparsity reduced】 training dataset
-    fullpath_train = mainpath + 'train.npz'
+    fullpath_train = data_path + 'train.npz'
     attri_name = ['user', 'item', 'rating', 'timestamp']
     trainset = load_trainset_npz(fullpath_train, attri_name)
     
     # load movie info. dataset including movie titles
-    movie_info_path = '../data/ml-25m20m_movie_info_poster.csv'
+    movie_info_path = data_path + '/rssa_movie_info.csv'
     movie_info = pd.read_csv(movie_info_path, encoding='latin1')    
     movie_title = movie_info[['movie_id', 'title']] 
     movie_title = movie_title.rename({'movie_id': 'item'}, axis = 1)
@@ -79,15 +79,15 @@ if __name__ == '__main__':
    
 
     '''
-    fullpath_offline_items1 = mainpath + 'offline_items_Bart.csv' 
-    fullpath_offline_items2 = mainpath + 'offline_items_Daricia.csv' 
-    fullpath_offline_items3 = mainpath + 'offline_items_Sushmita.csv' 
-    fullpath_offline_items4 = mainpath + 'offline_items_Shahan.csv' 
-    fullpath_offline_items5 = mainpath + 'offline_items_Vihang.csv' 
-    fullpath_offline_items6 = mainpath + 'offline_items_6.csv' 
-    fullpath_offline_items7 = mainpath + 'offline_items_7.csv' 
-    fullpath_offline_items8 = mainpath + 'offline_items_8.csv' 
-    fullpath_offline_items9 = mainpath + 'offline_items_9.csv' 
+    fullpath_offline_items1 = data_path + 'offline_items_Bart.csv' 
+    fullpath_offline_items2 = data_path + 'offline_items_Daricia.csv' 
+    fullpath_offline_items3 = data_path + 'offline_items_Sushmita.csv' 
+    fullpath_offline_items4 = data_path + 'offline_items_Shahan.csv' 
+    fullpath_offline_items5 = data_path + 'offline_items_Vihang.csv' 
+    fullpath_offline_items6 = data_path + 'offline_items_6.csv' 
+    fullpath_offline_items7 = data_path + 'offline_items_7.csv' 
+    fullpath_offline_items8 = data_path + 'offline_items_8.csv' 
+    fullpath_offline_items9 = data_path + 'offline_items_9.csv' 
     offline_items_s1.to_csv(fullpath_offline_items1, index = False)
     offline_items_s2.to_csv(fullpath_offline_items2, index = False)
     offline_items_s3.to_csv(fullpath_offline_items3, index = False)

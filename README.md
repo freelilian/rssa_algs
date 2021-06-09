@@ -10,3 +10,5 @@ APIs of the RSSA recommendation lists was implemented in RSSA_recommendations.py
 	
 	Each method take a user ID as input, return movie IDs in an numpy.ndarray
 		For testing purpose, available user IDs are: Bart, Daricia, Sushmita, Shahan, Aru, Mitali, Yash 
+		
+For testing data files, please download it from google drive separately.

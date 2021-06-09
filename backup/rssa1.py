@@ -153,6 +153,17 @@ if __name__ == "__main__":
     item_popularity = pd.read_csv(data_path + 'item_popularity.csv')
         # ['item', 'count', 'rank'], sorted by rank
 
+    # Read movie info dataset including movie titles 
+    movie_info_path = data_path + '/rssa_movie_info.csv'
+    movie_info = pd.read_csv(movie_info_path, encoding='latin1')
+    movie_title = movie_info[['movie_id', 'title']] 
+    movie_title = movie_title.rename({'movie_id': 'item'}, axis = 1)
+        # ['item', 'title']
+    # print(type(movie_title['item'][0]))
+    # print(movie_title.head(10))
+
+
+
     ### Import new ratings of the live user
     RSSA_team = ['Bart', 'Daricia', 'Sushmita', 'Shahan', 'Aru', 'Mitali', 'Vihang']
     for liveUserID in RSSA_team:
@@ -166,14 +177,7 @@ if __name__ == "__main__":
         new_ratings = pd.Series(ratings_liveUser.rating.to_numpy(), index = ratings_liveUser.item)
 
         N = 10 
-        # Read movie info dataset including movie titles 
-        movie_info_path = '../data/ml-25m20m_movie_info_poster.csv'
-        movie_info = pd.read_csv(movie_info_path, encoding='latin1')
-        movie_title = movie_info[['movie_id', 'title']] 
-        movie_title = movie_title.rename({'movie_id': 'item'}, axis = 1)
-            # ['item', 'title']
-        # print(type(movie_title['item'][0]))
-        # print(movie_title.head(10))
+
         
         ### Predicting
         RSSA_preds = RSSA_live_prediction(trained_model, liveUserID, new_ratings, item_popularity)

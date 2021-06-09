@@ -21,7 +21,7 @@ if __name__ == "__main__":
         # ['item', 'count', 'rank'], sorted by rank
         
     # Read movie info dataset including movie titles 
-    movie_info_path = '.../data/ml-25m20m_movie_info_poster.csv'
+    movie_info_path = '../../data/ml-25m20m_movie_info_poster.csv'
     movie_info = pd.read_csv(movie_info_path, encoding='latin1')
     movie_info = movie_info.rename({'movie_id': 'item'}, axis = 1)
     
