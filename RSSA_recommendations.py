@@ -39,7 +39,7 @@ def RSSA_live_prediction(algo, liveUserID, new_ratings, item_popularity):
     denominator = 10 ** digit
     # print(denominator)
     
-    a = 0.2
+    a = 0.5 ## updated Jul. 6, 2021
     als_implicit_preds_popularity_df = pd.merge(als_implicit_preds_df, item_popularity, how = 'left', on = 'item')
     RSSA_preds_df = als_implicit_preds_popularity_df
     RSSA_preds_df['discounted_score'] = RSSA_preds_df['score'] - a*(RSSA_preds_df['count']/denominator)
@@ -177,7 +177,7 @@ def import_trained_model(model_path):
     
     
 def get_dummy_liveUser_ratings(liveUserID):  
-    testing_path = '../testing_rating_rated_items_extracted/ratings_set4_rated_only_'
+    testing_path = '../testing_rating_rated_items_extracted/ratings_set6_rated_only_'
     fullpath_test =  testing_path + liveUserID + '.csv'
     ratings_liveUser = pd.read_csv(fullpath_test, encoding='latin1')
     # print(ratings_liveUser)
@@ -196,6 +196,8 @@ def get_RSSA_preds(liveUserID):
     item_popularity = pd.read_csv(data_path + 'item_popularity.csv')    
     model_path = '../model/'
     trained_model = import_trained_model(model_path)
+    
+    ## NEED to change the code to get the actual ratings from the Frontend
     [new_ratings, rated_items] = get_dummy_liveUser_ratings(liveUserID)
         #a series; np.ndarray
         
@@ -207,8 +209,8 @@ def get_RSSA_preds(liveUserID):
         # ['item', 'score', 'count', 'rank', 'discounted_score']     
 
     return RSSA_preds_noRatedItems 
-    
-    
+
+  
 def get_RSSA_topN(liveUserID):
     numRec = 10
     RSSA_preds_noRatedItems = get_RSSA_preds(liveUserID)
@@ -311,7 +313,7 @@ def get_RSSA_controversial_items(liveUserID):
 
 if __name__ == "__main__":
     print('Here are some dummy live users with about 20 ratings each: ')
-    print('    Bart, Daricia, Sushmita, Shahan, Aru, Mitali, Yash')
+    print('    Bart, Sushmita, Shahan, Aru, Mitali, Yash')
     liveUserID = input('\nEnter a user ID: ')
     
     rec_ids_topn = get_RSSA_topN(liveUserID)

@@ -39,7 +39,7 @@ def RSSA_live_prediction(algo, liveUserID, new_ratings, item_popularity):
     denominator = 10 ** digit
     # print(denominator)
     
-    a = 0.2
+    a = 0.5 # try [0.2, 0.3, 0.4, 0.5, 0.6, 1] on set 6
     als_implicit_preds_popularity_df = pd.merge(als_implicit_preds_df, item_popularity, how = 'left', on = 'item')
     RSSA_preds_df = als_implicit_preds_popularity_df
     RSSA_preds_df['discounted_score'] = RSSA_preds_df['score'] - a*(RSSA_preds_df['count']/denominator)
@@ -81,8 +81,7 @@ def high_std(model_path, liveUserID, new_ratings, item_popularity):
         col = 'score' + str(i+1)
         resampled_preds_df.columns = ['item', col]
         all_items_resampled_preds_df = pd.merge(all_items_resampled_preds_df, resampled_preds_df, how = 'left', on = 'item')
-    
-    
+        
     ## calculate std 
     # numpy.nanstd
     # Compute the standard deviation along the specified axis, while ignoring NaNs.
@@ -192,12 +191,12 @@ if __name__ == "__main__":
 
     ### Import new ratings of the live user
     # RSSA_team = ['Bart', 'Daricia', 'Sushmita', 'Shahan', 'Aru', 'Mitali', 'Yash']
-    RSSA_team = ['Bart', 'Shahan', 'Aru', 'Yash']
+    RSSA_team = ['Bart', 'Sushmita', 'Shahan', 'Aru', 'Mitali', 'Yash']
     
     for liveUserID in RSSA_team:
         # liveUserID = input('Enter a user ID: ')
         # liveUserID = 'Bart'
-        testing_path = '../testing_rating_rated_items_extracted/ratings_set4_rated_only_'
+        testing_path = '../testing_rating_rated_items_extracted/ratings_set6_rated_only_'
         fullpath_test =  testing_path + liveUserID + '.csv'
         ratings_liveUser = pd.read_csv(fullpath_test, encoding='latin1')
         # print(ratings_liveUser)
@@ -230,7 +229,8 @@ if __name__ == "__main__":
         recs_topN_discounted = discounted_preds_sorted.head(N)
         #print('\nTraditional Top-N:')
         #print(recs_topN_traditional)
-        print(recs_topN_discounted[['item', 'count', 'rank', 'discounted_score', 'title']])
+        # print(recs_topN_discounted[['item', 'count', 'rank', 'discounted_score', 'title']])
+        print(recs_topN_discounted[['count', 'rank', 'title']])
         
         #===> 2 - Things we think you will hate
         # essential components: averaged score of each item over all the users
@@ -245,7 +245,8 @@ if __name__ == "__main__":
         recs_hate_items = RSSA_preds_titled_noRated2.sort_values(by = 'margin', ascending = False).head(N)
         recs_hate_items_discounted = RSSA_preds_titled_noRated2.sort_values(by = 'margin_discounted', ascending = False).head(N)
         #print(recs_hate_items[['item', 'count', 'rank', 'margin_discounted', 'title']])
-        print(recs_hate_items_discounted[['item', 'count', 'rank', 'margin_discounted', 'title']])
+        # print(recs_hate_items_discounted[['item', 'count', 'rank', 'margin_discounted', 'title']])
+        print(recs_hate_items_discounted[['count', 'rank', 'title']])
         
         #===> 3 - Things you will be among the first to try
         # essential components: rating counts of each item
@@ -258,7 +259,8 @@ if __name__ == "__main__":
         recs_hip_items = RSSA_preds_titled_noRated2_sort_by_score_top200.sort_values(by = 'count', ascending = True).head(N)
         recs_hip_items_discounted = RSSA_preds_titled_noRated2_sort_by_Dscore_top200.sort_values(by = 'count', ascending = True).head(N)
         #print(recs_hip_items[['item', 'rank', 'discounted_score', 'count', 'title']])
-        print(recs_hip_items_discounted[['item', 'rank', 'discounted_score', 'count', 'title']])
+        # print(recs_hip_items_discounted[['item', 'rank', 'discounted_score', 'count', 'title']])
+        print(recs_hip_items_discounted[['rank', 'count', 'title']])
         
         #===> 4 - Things we have no clue about
         # essential components: resample, train 20 resampled implicitMF models offline
@@ -273,7 +275,8 @@ if __name__ == "__main__":
         resampled_preds_high_std_titled_norated = resampled_preds_high_std_titled[~resampled_preds_high_std_titled['item'].isin(rated_items)]
         resampled_preds_high_std_titled_norated_sorted = resampled_preds_high_std_titled_norated.sort_values(by = 'std', ascending = False)
         recs_no_clue_items = resampled_preds_high_std_titled_norated_sorted.head(N)
-        print(recs_no_clue_items[['item', 'rank', 'count', 'title']])
+        # print(recs_no_clue_items[['item', 'rank', 'count', 'title']])
+        print(recs_no_clue_items[['rank', 'count', 'title']])
         
         #print('\n  4.2 - Personalized list:')
         #print('\tProblematic: it is both memory expensive and computation expensive.') 
@@ -306,7 +309,8 @@ if __name__ == "__main__":
         variance_neighbors_titled_noRated =  variance_neighbors_titled[~variance_neighbors_titled['item'].isin(rated_items)]
         variance_neighbors_titled_noRated_sorted =  variance_neighbors_titled_noRated.sort_values(by = 'variance', ascending = False)
         recs_controversial_items = variance_neighbors_titled_noRated_sorted.head(N)
-        print(recs_controversial_items[['item', 'rank', 'count', 'variance', 'title']])
+        # print(recs_controversial_items[['item', 'rank', 'count', 'variance', 'title']])
+        print(recs_controversial_items[['rank', 'count', 'title']])
         print('-------------------------------------------------------------------------------------')
         '''
         num_TopN = [200, 500, 1000, 2000]
