@@ -95,7 +95,7 @@ def predict_user_no_clue_items(ratings: List[Rating], user_id) -> List[Preferenc
     data_path = './algs/data/'
     item_popularity = pd.read_csv(data_path + 'item_popularity.csv') 
     model_path = './algs/model/'
-    resampled_preds_high_std = RSSA.high_std(model_path, liveUserID, new_ratings, item_popularity)
+    resampled_preds_high_std = RSSA.high_std(model_path, user_id, new_ratings, item_popularity)
         # ['item', 'std', 'count', 'rank'] 
     resampled_preds_high_std_noRated = resampled_preds_high_std[~resampled_preds_high_std['item'].isin(rated_items)]
     resampled_preds_high_std_noRated_sorted = resampled_preds_high_std_noRated.sort_values(by = 'std', ascending = False)
@@ -123,7 +123,7 @@ def predict_user_controversial_items(ratings: List[Rating], user_id) -> List[Pre
             # user_features_(numpy.ndarray): The :math:`m \\times k` user-feature matrix.
             # user_index_(pandas.Index): Users in the model (length=:math:`n`).
     ### Predicting
-    [_, liveUser_feature] = RSSA.RSSA_live_prediction(trained_model, liveUserID, new_ratings, item_popularity)
+    [_, liveUser_feature] = RSSA.RSSA_live_prediction(trained_model, user_id, new_ratings, item_popularity)
         # ['item', 'score', 'count', 'rank', 'discounted_score']
         # liveUser_feature: ndarray
     distance_method = 'cosine'
