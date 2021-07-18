@@ -4,16 +4,16 @@ compute.py
 from typing import List
 from models import Rating, Preference
 
-import RSSA_recommendations as RSSA
+import algs.RSSA_recommendations as RSSA
 import pandas as pd
 import numpy as np
 
 def get_predictions(ratings: List[Rating], user_id) -> pd.DataFrame:
     # Could we also put the item_popularity.csv into database as well?
-    data_path = '../data/'
+    data_path = './algs/data/'
     item_popularity = pd.read_csv(data_path + 'item_popularity.csv')    
     
-    model_path = '../model/'
+    model_path = './algs/model/'
     trained_model = RSSA.import_trained_model(model_path)
     
     new_ratings = pd.Series(rating.rating for rating in ratings)
@@ -48,7 +48,7 @@ def predict_user_hate_items(ratings: List[Rating], user_id) -> List[Preference]:
     numRec = 10
     RSSA_preds_noRatedItems = get_predictions(ratings, user_id)
         # ['item', 'score', 'count', 'rank', 'discounted_score']
-    data_path = '../data/'
+    data_path = './algs/data/'
     ave_item_score = pd.read_csv(data_path + 'averaged_item_score_implicitMF.csv')
         # ['item', 'ave_score', 'ave_discounted_score']
     RSSA_preds_noRatedItems_with_ave = pd.merge(RSSA_preds_noRatedItems, ave_item_score, how = 'left', on = 'item')
@@ -61,7 +61,7 @@ def predict_user_hate_items(ratings: List[Rating], user_id) -> List[Preference]:
     
     recommendations = []
     for index, row in recs_hate_items_discounted.iterrows():
-        recommendations.append(Preference(str(np.int64(row['item'])), 'topN'))
+        recommendations.append(Preference(str(np.int64(row['item'])), 'hateItems'))
 
     return recommendations
     
@@ -82,7 +82,7 @@ def predict_user_hip_items(ratings: List[Rating], user_id) -> List[Preference]:
         
     recommendations = []
     for index, row in recs_hip_items_discounted.iterrows():
-        recommendations.append(Preference(str(np.int64(row['item'])), 'topN'))
+        recommendations.append(Preference(str(np.int64(row['item'])), 'hipItems'))
 
     return recommendations
     
@@ -92,9 +92,9 @@ def predict_user_no_clue_items(ratings: List[Rating], user_id) -> List[Preferenc
     rated_items = np.array([np.int64(rating.item_id) for rating in ratings])
 
     numRec = 10
-    data_path = '../data/'
+    data_path = './algs/data/'
     item_popularity = pd.read_csv(data_path + 'item_popularity.csv') 
-    model_path = '../model/'
+    model_path = './algs/model/'
     resampled_preds_high_std = RSSA.high_std(model_path, liveUserID, new_ratings, item_popularity)
         # ['item', 'std', 'count', 'rank'] 
     resampled_preds_high_std_noRated = resampled_preds_high_std[~resampled_preds_high_std['item'].isin(rated_items)]
@@ -103,7 +103,7 @@ def predict_user_no_clue_items(ratings: List[Rating], user_id) -> List[Preferenc
 
     recommendations = []
     for index, row in recs_no_clue_items.iterrows():
-        recommendations.append(Preference(str(np.int64(row['item'])), 'topN'))
+        recommendations.append(Preference(str(np.int64(row['item'])), 'noClue'))
 
     return recommendations
     
@@ -113,9 +113,9 @@ def predict_user_controversial_items(ratings: List[Rating], user_id) -> List[Pre
     rated_items = np.array([np.int64(rating.item_id) for rating in ratings])
 
     numRec = 10
-    data_path = '../data/'
+    data_path = './algs/data/'
     item_popularity = pd.read_csv(data_path + 'item_popularity.csv') 
-    model_path = '../model/'
+    model_path = './algs/model/'
     trained_model = RSSA.import_trained_model(model_path)
     umat = trained_model.user_features_
     users = trained_model.user_index_
@@ -139,14 +139,14 @@ def predict_user_controversial_items(ratings: List[Rating], user_id) -> List[Pre
     
     recommendations = []
     for index, row in recs_controversial_items.iterrows():
-        recommendations.append(Preference(str(np.int64(row['item'])), 'topN'))
+        recommendations.append(Preference(str(np.int64(row['item'])), 'controversialItems'))
 
     return recommendations
     
     
 
 if __name__ == '__main__':
-    testing_path = '../testing_rating_rated_items_extracted/ratings_set6_rated_only_'
+    testing_path = './algs/testing_rating_rated_items_extracted/ratings_set6_rated_only_'
     liveUserID = 'Bart'
     fullpath_test =  testing_path + liveUserID + '.csv'
     ratings_liveUser = pd.read_csv(fullpath_test, encoding='latin1')
