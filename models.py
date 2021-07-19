@@ -1,4 +1,6 @@
 from pydantic.dataclasses import dataclass
+from pydantic import BaseModel
+
 from typing import Dict, List
 try:
     from typing import Literal
@@ -30,7 +32,6 @@ class Item:
     genre: str
 
 
-
 @dataclass
 class Rating:
     """
@@ -49,7 +50,7 @@ class Preference:
     """
     item_id: str
     # categories: List[Literal["CONTROVERSIAL", ""]] # todo more
-    categories: Literal["topN", "hateItems", "hipItems", "noClue", "controversialItems"] # todo more
+    categories: Literal["top_n", "hate", "hip", "no_clue", "controversial"] # todo more
 
 
 @dataclass

@@ -40,7 +40,7 @@ def predict_user_topN(ratings: List[Rating], user_id) -> List[Preference]:
      
     recommendations = []
     for index, row in recs_topN_discounted.iterrows():
-        recommendations.append(Preference(str(np.int64(row['item'])), 'topN'))
+        recommendations.append(Preference(str(np.int64(row['item'])), 'top_n'))
 
     return recommendations
 
@@ -61,7 +61,7 @@ def predict_user_hate_items(ratings: List[Rating], user_id) -> List[Preference]:
     
     recommendations = []
     for index, row in recs_hate_items_discounted.iterrows():
-        recommendations.append(Preference(str(np.int64(row['item'])), 'hateItems'))
+        recommendations.append(Preference(str(np.int64(row['item'])), 'hate'))
 
     return recommendations
     
@@ -82,7 +82,7 @@ def predict_user_hip_items(ratings: List[Rating], user_id) -> List[Preference]:
         
     recommendations = []
     for index, row in recs_hip_items_discounted.iterrows():
-        recommendations.append(Preference(str(np.int64(row['item'])), 'hipItems'))
+        recommendations.append(Preference(str(np.int64(row['item'])), 'hip'))
 
     return recommendations
     
@@ -103,7 +103,7 @@ def predict_user_no_clue_items(ratings: List[Rating], user_id) -> List[Preferenc
 
     recommendations = []
     for index, row in recs_no_clue_items.iterrows():
-        recommendations.append(Preference(str(np.int64(row['item'])), 'noClue'))
+        recommendations.append(Preference(str(np.int64(row['item'])), 'no_clue'))
 
     return recommendations
     
@@ -139,7 +139,7 @@ def predict_user_controversial_items(ratings: List[Rating], user_id) -> List[Pre
     
     recommendations = []
     for index, row in recs_controversial_items.iterrows():
-        recommendations.append(Preference(str(np.int64(row['item'])), 'controversialItems'))
+        recommendations.append(Preference(str(np.int64(row['item'])), 'controversial'))
 
     return recommendations
     
