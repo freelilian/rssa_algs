@@ -21,10 +21,10 @@ def predict_preferences():
 
     preds = {
         'top_n': predict_user_topN,
-        #'hate': predict_user_hate_items,
-        #'hip': predict_user_hip_items,
-        #'no_clue': predict_user_no_clue_items,
-        #'controversial': predict_user_controversial_items
+        'hate': predict_user_hate_items,
+        'hip': predict_user_hip_items,
+        'no_clue': predict_user_no_clue_items,
+        'controversial': predict_user_controversial_items
     }
 
     for key, func in preds.items():
