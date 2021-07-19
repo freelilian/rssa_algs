@@ -50,7 +50,7 @@ class Preference:
     """
     item_id: str
     # categories: List[Literal["CONTROVERSIAL", ""]] # todo more
-    categories: Literal["top_n", "hate", "hip", "no_clue", "controversial"] # todo more
+    categories: Literal["top_n", "controversial", "hate", "hip", "no_clue"] # todo more
 
 
 @dataclass
