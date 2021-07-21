@@ -40,8 +40,9 @@ def predict_user_topN(ratings: List[Rating], user_id) -> List[Preference]:
      
     recommendations = []
     for index, row in recs_topN_discounted.iterrows():
-        recommendations.append(Preference(str(np.int64(row['item'])), 'top_n'))
-
+        # recommendations.append(Preference(str(np.int64(row['item'])), 'top_n'))
+        recommendations.append(str(np.int64(row['item'])))
+        
     return recommendations
 
 def predict_user_hate_items(ratings: List[Rating], user_id) -> List[Preference]:
@@ -61,7 +62,8 @@ def predict_user_hate_items(ratings: List[Rating], user_id) -> List[Preference]:
     
     recommendations = []
     for index, row in recs_hate_items_discounted.iterrows():
-        recommendations.append(Preference(str(np.int64(row['item'])), 'hate'))
+        # recommendations.append(Preference(str(np.int64(row['item'])), 'hate'))
+        recommendations.append(str(np.int64(row['item'])))
 
     return recommendations
     
@@ -82,7 +84,8 @@ def predict_user_hip_items(ratings: List[Rating], user_id) -> List[Preference]:
         
     recommendations = []
     for index, row in recs_hip_items_discounted.iterrows():
-        recommendations.append(Preference(str(np.int64(row['item'])), 'hip'))
+        # recommendations.append(Preference(str(np.int64(row['item'])), 'hip'))
+        recommendations.append(str(np.int64(row['item'])))
 
     return recommendations
     
@@ -103,7 +106,8 @@ def predict_user_no_clue_items(ratings: List[Rating], user_id) -> List[Preferenc
 
     recommendations = []
     for index, row in recs_no_clue_items.iterrows():
-        recommendations.append(Preference(str(np.int64(row['item'])), 'no_clue'))
+        # recommendations.append(Preference(str(np.int64(row['item'])), 'no_clue'))
+        recommendations.append(str(np.int64(row['item'])))
 
     return recommendations
     
@@ -139,7 +143,8 @@ def predict_user_controversial_items(ratings: List[Rating], user_id) -> List[Pre
     
     recommendations = []
     for index, row in recs_controversial_items.iterrows():
-        recommendations.append(Preference(str(np.int64(row['item'])), 'controversial'))
+        # recommendations.append(Preference(str(np.int64(row['item'])), 'controversial'))
+        recommendations.append(str(np.int64(row['item'])))
 
     return recommendations
     
