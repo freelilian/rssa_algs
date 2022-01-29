@@ -24,8 +24,11 @@ def get_predictions(ratings: List[Rating], user_id) -> pd.DataFrame:
     model_path = data_path = os.path.join(os.path.dirname(__file__), './algs/model/')
     trained_model = RSSA.import_trained_model(model_path)
     
-    new_ratings = pd.Series(rating.rating for rating in ratings)
+    # new_ratings = pd.Series(rating.rating for rating in ratings)
+        # index was wrong for new_ratings!!!!!! 1/28/2022
     rated_items = np.array([np.int64(rating.item_id) for rating in ratings])
+    new_ratings = pd.Series(np.array([np.float64(rating.rating) for rating in ratings]), index = rated_items)    
+        # updated 1/28/2022
     
     ### Predicting
     [RSSA_preds, liveUser_feature] = RSSA.RSSA_live_prediction(trained_model, user_id, new_ratings, item_popularity)
@@ -176,34 +179,40 @@ if __name__ == '__main__':
     #$ liveUserID = 'Bart'
     #$ fullpath_test =  testing_path + liveUserID + '.csv'
     
-    fullpath_test = os.path.join(os.path.dirname(__file__), './algs/testing_rating_rated_items_extracted/ratings_set6_rated_only_Bart.csv')
-    liveUserID = 'Bart'
-    ratings_liveUser = pd.read_csv(fullpath_test, encoding='latin1')
-    #print(ratings_liveUser.head(20))
+    RSSA_team = ['Bart', 'Sushmita', 'Shahan', 'Aru', 'Mitali', 'Yash']
+    for liveUserID in RSSA_team:
+        fullpath_test = os.path.join(os.path.dirname(__file__), 'algs/testing_rating_rated_items_extracted/ratings_set6_rated_only_' + liveUserID + '.csv')
+        ratings_liveUser = pd.read_csv(fullpath_test, encoding='latin1')
+        # print(ratings_liveUser.head(20))
     
-    ratings = []
-    for index, row in ratings_liveUser.iterrows():
-        ratings.append(Rating(row['item'], row['rating']))
+        ratings = []
+        for index, row in ratings_liveUser.iterrows():
+            ratings.append(Rating(row['item'], row['rating']))
+            
         
-    recommendations = predict_user_no_clue_items(ratings, liveUserID)
-    print(recommendations)
-    print()
+        recommendations = predict_user_topN(ratings, liveUserID)
+        print(recommendations)
     
-    
-    recommendations = predict_user_topN(ratings, liveUserID)
-    print(recommendations)
-    print()
-    
-    recommendations = predict_user_hate_items(ratings, liveUserID)
-    print(recommendations)
-    print()
-    
-    recommendations = predict_user_hip_items(ratings, liveUserID)
-    print(recommendations)
-    print()
-    
-    recommendations = predict_user_controversial_items(ratings, liveUserID)
-    print(recommendations)
-    print()
+        '''
+        recommendations = predict_user_topN(ratings, liveUserID)
+        print(recommendations)
+        print()
+        
+        recommendations = predict_user_hate_items(ratings, liveUserID)
+        print(recommendations)
+        print()
+        
+        recommendations = predict_user_hip_items(ratings, liveUserID)
+        print(recommendations)
+        print()
+        
+        recommendations = predict_user_no_clue_items(ratings, liveUserID)
+        print(recommendations)
+        print()
+        
+        recommendations = predict_user_controversial_items(ratings, liveUserID)
+        print(recommendations)
+        print()
+        '''
         
     
